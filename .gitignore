@@ -34,3 +34,6 @@ build/
 
 .jpb
 .mvn
+
+#secrets
+src/main/resources/secrets.properties
