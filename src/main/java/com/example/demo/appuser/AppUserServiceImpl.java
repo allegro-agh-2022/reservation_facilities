@@ -29,14 +29,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    public AppUserServiceImpl(AppUserRepository appUserRepository) {
-//        this.appUserRepository = appUserRepository;
-//    }
-
     @Override
     public List<AppUser> getUsers() {
         return appUserRepository.findAll();
@@ -44,7 +36,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public AppUser saveAppUser(AppUser appUser) {
-        //todo add roles
         String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(appUser.getEmail());
@@ -102,11 +93,15 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 
     @Transactional
-    public void updateAppUser(Long id, String name, String surname, String email) {
+    public void updateAppUser(Long id, String name, String surname, String email, String usersEmail) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException(
                         "student with id " + id + "does not exist"
                 ));
+
+        if (!Objects.equals(user.getEmail(), usersEmail)){
+            throw new IllegalStateException("Cannot change someone else password");
+        }
 
         if (name != null && name.length() > 0 && !Objects.equals(user.getName(), name)) {
             user.setName(name);
@@ -115,12 +110,31 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         if (surname != null && surname.length() > 0 && !Objects.equals(user.getSurname(), surname)) {
             user.setSurname(surname);
         }
+
         if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) {
             Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(email);
             if (userByEmail.isPresent()) {
                 throw new IllegalStateException("Email taken");
             }
             user.setEmail(email);
+        }
+    }
+
+    public void updateUserPassword(Long id, String oldPassword, String newPassword, String email) {
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException(
+                        "student with id " + id + "does not exist"
+                ));
+
+        if (!Objects.equals(user.getEmail(), email)){
+            throw new IllegalStateException("Cannot change someone else password");
+        }
+
+        if (oldPassword != null && newPassword != null && newPassword.length() > 0 ) {
+            if(!passwordEncoder.matches(oldPassword,user.getPassword())) {
+                throw new IllegalStateException("To change password put correct old password");
+            }
+            user.setPassword(passwordEncoder.encode(newPassword));
         }
     }
 
