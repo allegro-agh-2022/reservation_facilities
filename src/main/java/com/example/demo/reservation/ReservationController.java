@@ -50,9 +50,10 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservations/{id}")
-    public ResponseEntity<String> deleteReservation(@PathVariable Long id) {
+    public ResponseEntity<String> deleteReservation(HttpServletRequest request, @PathVariable Long id) {
 
-        boolean isRemoved = reservationService.deleteReservation(id);
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        boolean isRemoved = reservationService.deleteReservation(id, email);
 
         if (!isRemoved) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

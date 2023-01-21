@@ -2,6 +2,7 @@ package com.example.demo.reservation;
 
 import com.example.demo.appuser.AppUser;
 import com.example.demo.appuser.AppUserServiceImpl;
+import com.example.demo.appuser.Role;
 import com.example.demo.room.Room;
 import com.example.demo.room.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,12 +45,16 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
-    public boolean deleteReservation(Long id){
-        /* TO DO
-        * check if user deletes his own reservation*/
+    public boolean deleteReservation(Long id, String email){
         Optional<Reservation> reservation = reservationRepository.findById(id);
         if (reservation.isEmpty()){
             throw new IllegalArgumentException("no such reservation");
+        }
+        AppUser user = reservation.get().getAppUser();
+        AppUser currentUser = appUserService.getAppUser(email);
+        Role adminRole = currentUser.getRoles().stream().filter(role -> "ROLE_ADMIN".equals(role.getName())).findFirst().orElse(null);
+        if(!Objects.equals(user.getEmail(), email) && adminRole==null){
+            throw new IllegalStateException("Please delete your own reservations only");
         }
         reservationRepository.deleteById(id);
         return true;
