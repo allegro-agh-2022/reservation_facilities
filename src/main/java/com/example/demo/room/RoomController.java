@@ -30,6 +30,18 @@ public class RoomController {
         return ResponseEntity.created(uri).body(roomService.editRoom(roomForm));
     }
 
+    @PutMapping("/room/block")
+    public ResponseEntity<Room> blockRoom(@RequestBody RoomForm roomForm){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/room/block").toUriString());
+        return ResponseEntity.created(uri).body(roomService.blockRoom(roomForm));
+    }
+
+    @PutMapping("/room/unblock")
+    public ResponseEntity<Room> unblockRoom(@RequestBody RoomForm roomForm){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/room/unblock").toUriString());
+        return ResponseEntity.created(uri).body(roomService.unblockRoom(roomForm));
+    }
+
     @GetMapping("/rooms/get")
     public ResponseEntity<List<Room>> getRooms(){
         return ResponseEntity.ok().body(roomService.getRooms());

@@ -33,6 +33,10 @@ public class ReservationService {
         if (isSlotReserved){
             throw new IllegalArgumentException("already reserved");
         }
+        boolean isRoomBlocked = room.getIsBlocked();
+        if (isRoomBlocked){
+            throw new IllegalArgumentException("room is blocked");
+        }
         reservationRepository.save(reservation);
         room.addReservation(reservation);
         appUser.getReservationList().add(reservation);

@@ -1,6 +1,7 @@
 package com.example.demo.room;
 
 import com.example.demo.reservation.Reservation;
+import com.example.demo.reservation.ReservationRepository;
 import com.example.demo.utils.DateHandler;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class RoomService {
     private final RoomRepository roomRepository;
+    private final ReservationRepository reservationRepository;
 
     public Room saveRoom(RoomForm roomForm){
         Room room = new Room(roomForm.getName(), roomForm.getStartTime(), roomForm.getEndTime(), roomForm.getReservationTimeInMinutes());
@@ -52,6 +54,23 @@ public class RoomService {
         room.setName(roomForm.getName());
         room.setReservationTimeInMinutes(roomForm.getReservationTimeInMinutes());
         //room.setStartDateTime(roomForm.getStartDate());
+        return room;
+    }
+
+    public Room blockRoom(RoomForm roomForm) {
+        Room room = getRoomByName(roomForm.getName());
+        room.setIsBlocked(true);
+        List<Reservation> reservationsToCancel = room.getReservationList();
+        reservationsToCancel.forEach(reservation -> {
+            Long id = reservation.getId();
+            reservationRepository.deleteById(id);
+        });
+        return room;
+    }
+
+    public Room unblockRoom(RoomForm roomForm) {
+        Room room = getRoomByName(roomForm.getName());
+        room.setIsBlocked(false);
         return room;
     }
 

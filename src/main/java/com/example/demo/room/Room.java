@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -18,6 +19,7 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//@ToString(exclude = {"reservationList"})
 //@JsonIdentityInfo(
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
 //        property = "id")
@@ -28,6 +30,7 @@ public class Room {
     private String name;
     private Time startTime;
     private Time endTime;
+    private Boolean isBlocked;
 
     private int reservationTimeInMinutes;
 
@@ -44,6 +47,7 @@ public class Room {
         this.startTime = Time.valueOf(startTime);
         this.endTime = Time.valueOf(endTime);
         this.reservationTimeInMinutes = minutes;
+        this.isBlocked = false;
     }
 
     public void addReservation(Reservation reservation){
