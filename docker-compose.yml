@@ -1,0 +1,45 @@
+services:
+  operational-app:
+    image: 'operational-service-backend:latest'
+    build:
+      context: ./operational
+    container_name: operational-service-backend
+    depends_on:
+      - db-operational
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-operational:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SECRET_KEY=bigosik
+    ports:
+      - 8080:8080
+
+  archive-app:
+    image: 'archive-service-backend:latest'
+    build:
+      context: ./archive
+    container_name: archive-service-backend
+    depends_on:
+      - db-archive
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-archive:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    ports:
+      - 8081:8081
+
+  db-operational:
+    image: 'postgres:13.1-alpine'
+    container_name: operational-db
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+
+  db-archive:
+    image: 'postgres:13.1-alpine'
+    container_name: archive_db
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres

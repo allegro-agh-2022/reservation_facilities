@@ -36,4 +36,4 @@ build/
 .mvn
 
 #secrets
-src/main/resources/secrets.properties
+operational/src/main/resources/secrets.properties
