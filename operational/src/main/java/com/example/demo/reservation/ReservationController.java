@@ -5,9 +5,12 @@ import com.example.demo.utils.AuthHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +26,13 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @CrossOrigin(origins = "*")
 public class ReservationController {
     private final ReservationService reservationService;
-    private final AppUserServiceImpl appUserServiceImpl;
+    private final RestTemplate restTemplate;
+
+    @GetMapping("/archive/reservations")
+    public ResponseEntity<List<Reservation>> getArchivedReservations(HttpServletRequest request){
+        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>(){});
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
 
     @PostMapping("reservation/save")
     public ResponseEntity<String> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm){
@@ -61,11 +70,12 @@ public class ReservationController {
 
         return new ResponseEntity<>("successfully deleted", HttpStatus.OK);
     }
+
+    @Data
+    class ReservationForm {
+        private String startDate;
+        private String endDate;
+        private String roomName;
+    }
 }
 
-@Data
-class ReservationForm{
-    private String startDate;
-    private String endDate;
-    private String roomName;
-}
