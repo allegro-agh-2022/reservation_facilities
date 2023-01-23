@@ -1,6 +1,8 @@
 package com.example.demo.room;
 
+import com.example.demo.malfunction.Malfunction;
 import com.example.demo.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +41,15 @@ public class Room {
     @JsonIgnore
     private List<Reservation> reservationList = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "room",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonBackReference
+
+    private List<Malfunction> malfunctions = new ArrayList<>();
+
     public Room(String name, String startTime, String endTime, int minutes) {
         this.name = name;
         this.startTime = Time.valueOf(startTime);
@@ -46,7 +57,7 @@ public class Room {
         this.reservationTimeInMinutes = minutes;
     }
 
-    public void addReservation(Reservation reservation){
+    public void addReservation(Reservation reservation) {
         reservationList.add(reservation);
     }
 }

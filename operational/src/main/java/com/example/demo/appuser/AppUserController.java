@@ -88,13 +88,25 @@ public class AppUserController {
 //    }
 
     @PutMapping(path = "/user/{userId}")
-    public void updateAppUser(
+    public void updateAppUser(HttpServletRequest request,
             @PathVariable("userId") Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String surname,
-            @RequestParam(required = false) String email) {
-        appUserServiceImpl.updateAppUser(id, name, surname, email);
+            @RequestParam(required = false) String email
+            ) {
+        String usersEmail = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        appUserServiceImpl.updateAppUser(id, name, surname, email, usersEmail);
 
+    }
+
+    @PutMapping(path = "/user/update_password/{userId}")
+    public void updateUserPassword(HttpServletRequest request,
+            @PathVariable("userId") Long id,
+            @RequestParam(required = false) String oldPassword,
+            @RequestParam(required = false) String newPassword
+    ) {
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        appUserServiceImpl.updateUserPassword(id, oldPassword, newPassword, email);
     }
 }
 

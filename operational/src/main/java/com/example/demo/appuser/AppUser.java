@@ -1,6 +1,8 @@
 package com.example.demo.appuser;
 
+import com.example.demo.malfunction.Malfunction;
 import com.example.demo.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,11 @@ public class AppUser {
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy="appUser", cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Malfunction> malfunctions = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "appUser",

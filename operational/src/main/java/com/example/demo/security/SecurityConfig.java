@@ -52,7 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/api/v1/rooms/get").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/room_reservations/{name}").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/room/").hasAnyAuthority(  "ROLE_ADMIN");
-        http.authorizeRequests().antMatchers( "/api/v1/room/").hasAnyAuthority(  "ROLE_ADMIN");
+
+
+        http.authorizeRequests().antMatchers(POST, "/api/v1/malfunctions/").hasAnyAuthority(  "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(PUT, "/api/v1/malfunctions/{malfunctionId}").hasAnyAuthority(  "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/malfunctions/create").hasAnyAuthority(  "ROLE_USER", "ROLE_ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(customAuthenticationFilter);
