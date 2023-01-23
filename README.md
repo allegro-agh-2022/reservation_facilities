@@ -1,9 +1,11 @@
 # reservation_facilities
-To make this app work in **src/main/resources** add file **secrets.properties** with such content:
 
+To start the app:
+run those two configurations:
+![](images/archive.jpg)![](images/operational.jpg)
+
+Next run
 ```
-spring.datasource.url=[YOUR DB URL]
-spring.datasource.username=[YOUR DB USERNAME]
-spring.datasource.password={YOUR DB PASSWORD]
+docker-compose build
+docker-compose up
 ```
-Also add environmental variable SECRET_KEY=[SECRET]
