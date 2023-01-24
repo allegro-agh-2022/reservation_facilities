@@ -32,18 +32,28 @@ public class ReservationController {
     private final RestTemplate restTemplate;
 
     @GetMapping("/archive/reservations")
-    public ResponseEntity<List<Reservation>> getArchivedReservations(HttpServletRequest request) {
+    public ResponseEntity<List<Reservation>> getArchivedReservations() {
         ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
         });
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 
-    @GetMapping("/archive/reservations/search")
+    @GetMapping("/archive/reservations/searchByRoom")
     public ResponseEntity<List<Reservation>> getArchivedReservationsByRoom(@RequestParam String roomName) {
         Map<String, String> uriVariables = new HashMap<>();
 
         uriVariables.put("room", roomName);
-        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations/search?room={room}", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
+        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations/searchByRoom?room={room}", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
+        }, uriVariables);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+    @GetMapping("/archive/reservations/searchByUser")
+    public ResponseEntity<List<Reservation>> getArchivedReservationsByUser(@RequestParam String email) {
+        Map<String, String> uriVariables = new HashMap<>();
+
+        uriVariables.put("email", email);
+        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations/searchByEmail?email={email}", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
         }, uriVariables);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }

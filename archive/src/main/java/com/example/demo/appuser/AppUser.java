@@ -1,7 +1,9 @@
 package com.example.demo.appuser;
 
+import com.example.demo.malfunction.Malfunction;
 import com.example.demo.reservation.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +40,13 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @JsonIgnoreProperties({"userEmail"})
     private List<Reservation> reservationList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy="appUser", cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Malfunction> malfunctions = new ArrayList<>();
 
     public AppUser(){
 

@@ -2,7 +2,6 @@ package com.example.demo.room;
 
 import com.example.demo.malfunction.Malfunction;
 import com.example.demo.reservation.Reservation;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,7 +45,6 @@ public class Room {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonBackReference
     private List<Malfunction> malfunctions = new ArrayList<>();
 
     public Room(String name, String startTime, String endTime, int minutes) {

@@ -85,8 +85,7 @@ public class RoomService {
     public boolean isSlotReserved(List<Reservation> reservations , Timestamp startDate, Timestamp endDate, Timestamp now){
         Stream<Reservation> stream = reservations.stream();
         boolean isReserved = stream.anyMatch(reservation-> reservation.getStartDate().equals(startDate) && reservation.getEndDate().equals(endDate));
-        boolean isPastNow =  startDate.compareTo(now)<=0;
-        return isPastNow || isReserved;
+        return isReserved;
     }
 
     public Room saveRoom(RoomForm roomForm){

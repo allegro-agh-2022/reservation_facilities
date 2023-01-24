@@ -28,7 +28,7 @@ public class ReservationService {
     public Reservation saveReservation(ReservationForm reservationForm, String email){
         Room room = roomService.getRoomByName(reservationForm.getRoomName());
         AppUser appUser = appUserService.getAppUser(email);
-        Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
+        Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser, email);
         List<Reservation> reservations = getRoomReservations(reservationForm.getRoomName());
         Timestamp now = new Timestamp(System.currentTimeMillis());
         boolean isSlotReserved = roomService.isSlotReserved(reservations, reservation.getStartDate(), reservation.getEndDate(), now);
