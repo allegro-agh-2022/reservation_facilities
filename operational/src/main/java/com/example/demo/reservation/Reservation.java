@@ -40,7 +40,9 @@ public class Reservation {
     @JoinColumn(name="user_id")
     private AppUser appUser;
 
-    public Reservation(Long id, Date startDate, Date endDate, Room room, AppUser appUser) {
+    private String userEmail;
+
+    public Reservation(Long id, Date startDate, Date endDate, Room room, AppUser appUser, String userEmail) {
         java.util.Date utilDate = new java.util.Date();
         this.id = id;
         this.startDate = new Timestamp(startDate.getTime());
@@ -48,14 +50,16 @@ public class Reservation {
         this.creationDate = new Timestamp(utilDate.getTime());
         this.room = room;
         this.appUser = appUser;
+        this.userEmail = userEmail;
     }
 
-    public Reservation(String startDate, String endDate, Room room, AppUser appUser){
+    public Reservation(String startDate, String endDate, Room room, AppUser appUser, String userEmail){
         java.util.Date utilDate = new java.util.Date();
         this.startDate = new Timestamp(DateHandler.handleDate(startDate).getTime());
         this.endDate = new Timestamp(DateHandler.handleDate(endDate).getTime());
         this.creationDate = new Timestamp(utilDate.getTime());
         this.room = room;
         this.appUser = appUser;
+        this.userEmail = userEmail;
     }
 }

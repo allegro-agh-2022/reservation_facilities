@@ -20,13 +20,13 @@ public class ReservationController {
     private final AppUserServiceImpl appUserService;
 
 
-    @GetMapping("/reservations/search")
+    @GetMapping("/reservations/searchByRoom")
     public ResponseEntity<List<Reservation>> getRoomReservations(@RequestParam String room) {
         return ResponseEntity.ok().body(reservationService.getRoomReservations(room));
     }
 
-    @GetMapping("/reservations/{email}")
-    public ResponseEntity<List<Reservation>> getUserReservations(@PathVariable String email) {
+    @GetMapping("/reservations/searchByEmail")
+    public ResponseEntity<List<Reservation>> getUserReservations(@RequestParam String email) {
         return ResponseEntity.ok().body(appUserService.getReservationsByEmail(email));
     }
 
