@@ -1,5 +1,6 @@
 package com.example.demo.reservation;
 
+import com.example.demo.appuser.AppUserServiceImpl;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +17,17 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final AppUserServiceImpl appUserService;
 
 
-    @GetMapping("/reservations/{name}")
-    public ResponseEntity<List<Reservation>> getRoomReservations(@PathVariable String name) {
-        return ResponseEntity.ok().body(reservationService.getRoomReservations(name));
+    @GetMapping("/reservations/search")
+    public ResponseEntity<List<Reservation>> getRoomReservations(@RequestParam String room) {
+        return ResponseEntity.ok().body(reservationService.getRoomReservations(room));
+    }
+
+    @GetMapping("/reservations/{email}")
+    public ResponseEntity<List<Reservation>> getUserReservations(@PathVariable String email) {
+        return ResponseEntity.ok().body(appUserService.getReservationsByEmail(email));
     }
 
     @GetMapping("reservations")

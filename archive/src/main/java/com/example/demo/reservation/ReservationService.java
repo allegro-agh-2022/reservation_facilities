@@ -45,13 +45,7 @@ public class ReservationService {
     }
 
     public List<Reservation> getRoomReservations(String name) {
-        //return reservationRepository.findByRoom(name);
-        List<Reservation> reservations = new ArrayList<>();
-        return reservations;
-    }
-
-    public List<Reservation> geUserReservations(String email) {
-        List<Reservation> reservations = appUserService.getReservationsByEmail(email);
-        return reservations;
+        Room room = roomService.getRoomByName(name);
+        return reservationRepository.findReservationsByRoom(room);
     }
 }
