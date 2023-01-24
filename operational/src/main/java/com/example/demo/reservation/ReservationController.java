@@ -12,10 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -29,17 +32,28 @@ public class ReservationController {
     private final RestTemplate restTemplate;
 
     @GetMapping("/archive/reservations")
-    public ResponseEntity<List<Reservation>> getArchivedReservations(HttpServletRequest request){
-        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>(){});
+    public ResponseEntity<List<Reservation>> getArchivedReservations(HttpServletRequest request) {
+        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
+        });
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+    @GetMapping("/archive/reservations/search")
+    public ResponseEntity<List<Reservation>> getArchivedReservationsByRoom(@RequestParam String roomName) {
+        Map<String, String> uriVariables = new HashMap<>();
+
+        uriVariables.put("room", roomName);
+        ResponseEntity<List<Reservation>> response = restTemplate.exchange("http://archive-app:8081/api/v1/reservations/search?room={room}", HttpMethod.GET, null, new ParameterizedTypeReference<List<Reservation>>() {
+        }, uriVariables);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 
     @PostMapping("reservation/save")
-    public ResponseEntity<String> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm){
+    public ResponseEntity<String> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm) {
         String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/reservation/save").toUriString());
         reservationService.saveReservation(reservationForm, email);
-        return ResponseEntity.created(uri).body("created successfully");
+        return new ResponseEntity<>("created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/reservations/{name}")
@@ -54,7 +68,7 @@ public class ReservationController {
     }
 
     @GetMapping("reservations")
-    public ResponseEntity<List<Reservation>> getReservations(){
+    public ResponseEntity<List<Reservation>> getReservations() {
         return ResponseEntity.ok().body(reservationService.getReservations());
     }
 
@@ -70,12 +84,7 @@ public class ReservationController {
 
         return new ResponseEntity<>("successfully deleted", HttpStatus.OK);
     }
-
-    @Data
-    class ReservationForm {
-        private String startDate;
-        private String endDate;
-        private String roomName;
-    }
 }
+
+
 

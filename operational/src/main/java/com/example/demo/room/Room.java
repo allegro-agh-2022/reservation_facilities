@@ -47,7 +47,6 @@ public class Room {
             orphanRemoval = true
     )
     @JsonBackReference
-
     private List<Malfunction> malfunctions = new ArrayList<>();
 
     public Room(String name, String startTime, String endTime, int minutes) {

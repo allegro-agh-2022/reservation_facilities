@@ -25,7 +25,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final AppUserServiceImpl appUserService;
     private final RoomService roomService;
-    public Reservation saveReservation(ReservationController.ReservationForm reservationForm, String email){
+    public Reservation saveReservation(ReservationForm reservationForm, String email){
         Room room = roomService.getRoomByName(reservationForm.getRoomName());
         AppUser appUser = appUserService.getAppUser(email);
         Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
@@ -61,9 +61,8 @@ public class ReservationService {
     }
 
     public List<Reservation> getRoomReservations(String name) {
-        //return reservationRepository.findByRoom(name);
-        List<Reservation> reservations = new ArrayList<>();
-        return reservations;
+        Room room = roomService.getRoomByName(name);
+        return reservationRepository.findReservationsByRoom(room);
     }
 
     public List<Reservation> geUserReservations(String email) {
