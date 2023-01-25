@@ -33,7 +33,7 @@ build/
 .vscode/
 
 .jpb
-.mvn
+
 
 #secrets
 operational/src/main/resources/secrets.properties
