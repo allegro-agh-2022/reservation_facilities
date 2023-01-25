@@ -124,6 +124,7 @@ public class RoomService {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    static
     class StartEnd{
         String start;
         String end;

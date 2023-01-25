@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import static javax.persistence.FetchType.EAGER;
 @Table
 @Data
 @AllArgsConstructor
+@ToString(exclude = {"reservationList"})
 public class AppUser {
     @Id
     @SequenceGenerator(name="user_sequence",
