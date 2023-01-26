@@ -62,4 +62,13 @@ public class Reservation {
         this.appUser = appUser;
         this.userEmail = userEmail;
     }
+
+    public Reservation(String startDate, String endDate, Room room, AppUser appUser){
+        java.util.Date utilDate = new java.util.Date();
+        this.startDate = new Timestamp(DateHandler.handleDate(startDate).getTime());
+        this.endDate = new Timestamp(DateHandler.handleDate(endDate).getTime());
+        this.creationDate = new Timestamp(utilDate.getTime());
+        this.room = room;
+        this.appUser = appUser;
+    }
 }
