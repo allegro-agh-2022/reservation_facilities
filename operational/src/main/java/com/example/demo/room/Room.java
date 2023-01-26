@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -22,6 +23,7 @@ import static javax.persistence.GenerationType.AUTO;
 //@JsonIdentityInfo(
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
 //        property = "id")
+@ToString(exclude = {"reservationList"})
 public class Room {
     @Id
     @GeneratedValue(strategy = AUTO)
