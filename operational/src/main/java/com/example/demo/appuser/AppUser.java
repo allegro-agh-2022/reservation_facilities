@@ -31,7 +31,7 @@ public class AppUser {
     private String surname;
     private String email;
 
-    @JsonIgnore
+//    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = EAGER)
