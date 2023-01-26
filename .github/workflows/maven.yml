@@ -31,7 +31,9 @@ jobs:
       run: mvn -B clean package -pl operational -am -DskipTests
     - name: Build archive with Maven
       run: mvn -B clean package -pl archive -am -DskipTests
-    - run: mkdir staging && cp target/*.jar staging
+    - run: mkdir staging 
+    - run: cp operational/target/*.jar staging
+    - run: cp archive/target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
